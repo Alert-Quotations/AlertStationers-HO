@@ -1,400 +1,146 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Alert Stationers - Contracted Quote Builder</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-    body{
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 12px;
-      padding: 0;
-      color: #222;
-      background: #f4f6f8;
-    }
-    .container{ max-width: 1000px; margin: 0 auto; }
-    .header{
-      display: flex; align-items: center; gap: 16px;
-      margin-bottom: 14px; padding: 12px;
-      background: #fff; border-radius: 10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .logo{
-      width: 160px; height: 100px; border-radius: 8px;
-      background: #fff; display:flex; align-items:center;
-      justify-content:center; overflow:hidden;
-      border:1px solid #eee; padding:6px;
-    }
-    .logo img{ width:100%; height:100%; object-fit:contain; }
-    .headtext{ flex:1; }
-    h1{ margin:0; font-size:1.25rem; }
-    .tag{ color:#555; margin-top:6px; }
-    .card{
-      background:#fff; padding:14px; border-radius:8px;
-      box-shadow:0 1px 4px rgba(0,0,0,0.06); margin-bottom:12px;
-    }
-    table{ width:100%; border-collapse:collapse; }
-    th,td{
-      padding:8px; border-bottom:1px solid #efefef;
-      text-align:left; vertical-align:middle;
-    }
-    th{ background:#fafafa; }
-    .price, .linetotal{ text-align:right; }
-    .qty{ width:70px; }
-    .controls{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
-    .btn{
-      padding:8px 12px; border-radius:6px; border:none;
-      cursor:pointer; margin:2px;
-    }
-    .btn-primary{ background:#0077cc; color:white; }
-    .btn-outline{ background:white; border:1px solid #bbb; }
-    .small{ font-size:0.9em; color:#555; }
-    .contract{
-      font-size:0.9em; background:#fff; padding:12px;
-      border-radius:6px; border:1px solid #eee;
-    }
-    .required{ color:#c00; }
-    @media (max-width:700px){
-      .header{ flex-direction:column; align-items:flex-start; }
-      .logo{ width:120px; height:80px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Alert Stationers – Online Quote</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#f4f6f8;
+    margin:0;
+    padding:12px;
+}
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+.header{
+    background:#fff;
+    padding:14px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.08);
+    margin-bottom:16px;
+}
+.logo{
+    width:150px;
+    height:90px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.logo img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+h1{margin:0;font-size:1.4rem;}
+.card{
+    background:#fff;
+    padding:14px;
+    border-radius:8px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.06);
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+th,td{
+    padding:8px;
+    border-bottom:1px solid #eee;
+}
+th{background:#fafafa;}
+.price{text-align:right;}
+.qty{width:70px;}
+button{
+    padding:8px 14px;
+    border-radius:6px;
+    border:none;
+    background:#e6007e;
+    color:#fff;
+    cursor:pointer;
+}
+.total{
+    font-size:1.2rem;
+    margin-top:10px;
+    text-align:right;
+}
+</style>
 </head>
+
 <body>
 <div class="container">
 
-  <div class="header">
+<div class="header">
     <div class="logo">
-      <!-- upload logo_converted.png into the repo root -->
-      <img src="logo_converted.png" alt="Alert Stationers Logo">
+        <img src="logo_converted.png" alt="Alert Stationers">
     </div>
-    <div class="headtext">
-      <h1>Alert Stationers — Contracted Quote</h1>
-      <div class="tag">For contracted customers only</div>
+    <div>
+        <h1>Alert Stationers</h1>
+        <div>Online Quotation Builder</div>
     </div>
-  </div>
+</div>
 
-  <div class="card">
-    <h3 style="margin-top:0">Customer &amp; Contract details</h3>
-    <form id="customerForm" onsubmit="return false">
-      <label>Company / Parent Name<span class="required">*</span><br>
-        <input id="custName" required style="width:100%">
-      </label><br><br>
-
-      <label>Contract / Customer ID<span class="required">*</span><br>
-        <input id="contractId" required style="width:100%">
-      </label><br><br>
-
-      <label>Child's Name (optional)<br>
-        <input id="childName" style="width:100%">
-      </label><br><br>
-
-      <label>Grade<br>
-        <input id="childGrade" style="width:100%">
-      </label><br><br>
-
-      <label>Phone number<span class="required">*</span><br>
-        <input id="custPhone" required style="width:100%">
-      </label><br><br>
-
-      <label>Email (optional)<br>
-        <input id="custEmail" style="width:100%">
-      </label><br><br>
-
-      <label>Delivery or Collection<br>
-        <select id="delMethod" onchange="toggleAddress()">
-          <option value="Collection">Collection</option>
-          <option value="Delivery">Delivery (add address)</option>
-        </select>
-      </label><br><br>
-
-      <div id="addressWrap" style="display:none">
-        <label>Delivery address<br>
-          <textarea id="custAddress" style="width:100%"></textarea>
-        </label><br><br>
-      </div>
-    </form>
-  </div>
-
-  <div class="card">
-    <h3 style="margin-top:0">Items (contracted prices applied)</h3>
-    <p class="small">Enter quantities only — prices are fixed for contracted customers.</p>
-
-    <table id="itemsTable">
-      <thead>
-        <tr>
-          <th style="width:12%">Code</th>
-          <th>Description</th>
-          <th style="width:14%">Price (R)</th>
-          <th style="width:12%">Qty</th>
-          <th style="width:14%">Line total (R)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- ✏️ EXAMPLE ROWS — DUPLICATE AND EDIT FOR ALL CONTRACTED ITEMS -->
-
-        <tr data-price="6.80">
-          <td>AS009</td>
-          <td>A4 72pg Exercise Book</td>
-          <td class="price">6.80</td>
-          <td><input class="qty" type="number" min="0" value="0" oninput="recalc()"></td>
-          <td class="linetotal">0.00</td>
-        </tr>
-
-        <tr data-price="12.50">
-          <td>AS010</td>
-          <td>Example Second Item Description</td>
-          <td class="price">12.50</td>
-          <td><input class="qty" type="number" min="0" value="0" oninput="recalc()"></td>
-          <td class="linetotal">0.00</td>
-        </tr>
-
-        <!-- 🧩 To add more:
-             copy <tr>...</tr>, change:
-             - code (ASxxx)
-             - description
-             - data-price="X.XX"
-             - inner text in <td class="price">X.XX
-        -->
-      </tbody>
+<div class="card">
+    <table id="priceTable">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Code</th>
+                <th class="price">Price</th>
+                <th>Qty</th>
+                <th class="price">Total</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
     </table>
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-      <div class="small">
-        Download the PDF or send via WhatsApp to confirm your order.
-      </div>
-      <div>
-        <strong>Total: R <span id="total">0.00</span></strong>
-      </div>
+    <div class="total">
+        <strong>Grand Total: R <span id="grandTotal">0.00</span></strong>
     </div>
+</div>
 
-    <div style="margin-top:8px" class="contract">
-      <h4>Contract Terms (brief)</h4>
-      <p>
-        By submitting this quote you confirm that you are a contracted customer
-        of Alert Stationers and accept our trading terms. Invoices will be raised
-        and payment terms as per contract apply.
-      </p>
-      <label>
-        <input type="checkbox" id="acceptTerms">
-        I accept the Contract Terms &amp; Conditions (required)
-      </label>
-    </div>
+</div>
 
-    <div class="controls">
-      <button class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
-      <button class="btn btn-outline" onclick="sendEmail()">Send to us by Email</button>
-      <button class="btn btn-primary" onclick="sendWhatsApp()">Send via WhatsApp</button>
-      <button class="btn btn-outline" onclick="clearAll()">Clear</button>
-    </div>
-  </div>
-
-  <!-- hidden backup form (not strictly needed but here if you use Netlify later) -->
-  <form name="alert-quote-contracted" method="POST" id="netlifyForm" style="display:none">
-    <input type="hidden" name="form-name" value="alert-quote-contracted">
-    <input type="text" name="contract_id" id="nf_contract">
-    <input type="text" name="parent_name" id="nf_parent">
-    <input type="text" name="phone" id="nf_phone">
-    <input type="email" name="email" id="nf_email">
-    <input type="text" name="items" id="nf_items">
-    <input type="text" name="total" id="nf_total">
-  </form>
-
-</div><!-- /.container -->
-
-<!-- jsPDF CDN for PDF generation -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mgvdapjv"; // your Formspree endpoint
+fetch("Price.csv")
+.then(r=>r.text())
+.then(t=>{
+    let rows=t.trim().split("\n").slice(1);
+    let body=document.querySelector("#priceTable tbody");
 
-function toggleAddress(){
-  var m = document.getElementById('delMethod').value;
-  document.getElementById('addressWrap').style.display = (m === 'Delivery') ? 'block' : 'none';
-}
+    rows.forEach(r=>{
+        let c=r.split(",");
+        if(c.length<3)return;
 
-function recalc(){
-  var rows = document.querySelectorAll('#itemsTable tbody tr');
-  var total = 0;
-  rows.forEach(function(r){
-    var price = parseFloat(r.getAttribute('data-price')) || 0;
-    var priceCell = r.querySelector('.price');
-    priceCell.innerText = price.toFixed(2);
-    var qty = parseFloat(r.querySelector('.qty').value) || 0;
-    var line = price * qty;
-    r.querySelector('.linetotal').innerText = line.toFixed(2);
-    total += line;
-  });
-  document.getElementById('total').innerText = total.toFixed(2);
-}
-
-function buildSelectedList(){
-  var rows = document.querySelectorAll('#itemsTable tbody tr');
-  var list = [];
-  rows.forEach(function(r){
-    var qty = parseFloat(r.querySelector('.qty').value) || 0;
-    if(qty > 0){
-      var code = r.children[0].innerText.trim();
-      var desc = r.children[1].innerText.trim();
-      var price = parseFloat(r.getAttribute('data-price')) || 0;
-      list.push({
-        code: code,
-        desc: desc,
-        price: price,
-        qty: qty,
-        line: +(price * qty).toFixed(2)
-      });
-    }
-  });
-  return list;
-}
-
-function ensureContractAccepted(){
-  const accept = document.getElementById('acceptTerms');
-  if(!accept || !accept.checked){
-    alert('You must accept our Contract Terms & Conditions before continuing.');
-    return false;
-  }
-  const cidEl = document.getElementById('contractId') || { value: '' };
-  const cid = (cidEl.value || '').trim();
-  if(!cid){
-    alert('Contract ID is required for contracted customers.');
-    return false;
-  }
-  return true;
-}
-
-function formatQuoteText(){
-  var custName = (document.getElementById('custName') || {value:''}).value;
-  var contractId = (document.getElementById('contractId') || {value:''}).value;
-  var childName = (document.getElementById('childName') || {value:''}).value;
-  var childGrade = (document.getElementById('childGrade') || {value:''}).value;
-  var custPhone = (document.getElementById('custPhone') || {value:''}).value;
-  var custEmail = (document.getElementById('custEmail') || {value:''}).value;
-  var method = (document.getElementById('delMethod') || {value:''}).value;
-  var address = (document.getElementById('custAddress') || {value:''}).value;
-  var list = buildSelectedList();
-  var total = (document.getElementById('total') || {innerText:'0.00'}).innerText;
-
-  var lines = [];
-  lines.push('Contracted Quote — Alert Stationers');
-  lines.push('Contract ID: ' + contractId);
-  lines.push('Parent/Company: ' + custName);
-  if(childName)  lines.push('Child: ' + childName);
-  if(childGrade) lines.push('Grade: ' + childGrade);
-  if(custPhone)  lines.push('Phone: ' + custPhone);
-  if(custEmail)  lines.push('Email: ' + custEmail);
-  lines.push('Method: ' + method);
-  if(method === 'Delivery' && address){ lines.push('Address: ' + address); }
-  lines.push('');
-  lines.push('Items:');
-  list.forEach(function(it){
-    lines.push(it.code + ' — ' + it.desc + ' | R' + it.price.toFixed(2) +
-      ' x ' + it.qty + ' = R' + it.line.toFixed(2));
-  });
-  lines.push('');
-  lines.push('Total: R' + total);
-  lines.push('');
-  lines.push('I confirm I am a contracted customer and accept the terms.');
-
-  return lines.join('\n');
-}
-
-function sendWhatsApp(){
-  if(!ensureContractAccepted()) return;
-  var txt = formatQuoteText();
-  var url = 'https://wa.me/?text=' + encodeURIComponent(txt);
-  window.open(url, '_blank');
-}
-
-async function submitContractedQuote(){
-  if(!ensureContractAccepted()) return;
-  var items = buildSelectedList();
-  if(items.length === 0){
-    alert('Please select at least one item (enter quantity).');
-    return;
-  }
-
-  var payload = {
-    contract_id: (document.getElementById('contractId') || {value:''}).value,
-    parent_name: (document.getElementById('custName') || {value:''}).value,
-    phone: (document.getElementById('custPhone') || {value:''}).value,
-    email: (document.getElementById('custEmail') || {value:''}).value,
-    items: items,
-    total: (document.getElementById('total') || {innerText:'0.00'}).innerText
-  };
-
-  try{
-    const res = await fetch(FORMSPREE_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json', 'Accept':'application/json' },
-      body: JSON.stringify(payload)
+        let tr=document.createElement("tr");
+        tr.innerHTML=`
+        <td>${c[0]}</td>
+        <td>${c[1]}</td>
+        <td class="price">${parseFloat(c[2]).toFixed(2)}</td>
+        <td><input class="qty" type="number" value="0" min="0" onchange="calc()"></td>
+        <td class="price line">0.00</td>`;
+        body.appendChild(tr);
     });
-    let body = '';
-    try{ body = await res.text(); }catch(e){}
-    console.log('Formspree response', res.status, body);
-    if(res.ok){
-      alert('Quote submitted — thank you! A copy has been sent to marketing@alertstationers.com.');
-      clearAll();
-    } else {
-      alert('Submission failed — please try again (see console for details).');
-    }
-  }catch(err){
-    console.error('Network error submitting quote', err);
-    alert('Network error — please try again later.');
-  }
-}
+});
 
-function sendEmail(){ submitContractedQuote(); return; }
-
-function downloadPDF(){
-  if(!ensureContractAccepted()) return;
-  var jsPDFLib = window.jspdf || window.jsPDF || {};
-  var jsPDF = jsPDFLib.jsPDF || jsPDFLib.jsPDF;
-  if(!jsPDF){
-    alert('PDF library failed to load. Please try again later.');
-    return;
-  }
-  var doc = new jsPDF('p','mm','a4');
-  var y = 12;
-  doc.setFontSize(14);
-  doc.text('Alert Stationers — Contracted Quote',14,y);
-  y += 8;
-  var contractId = (document.getElementById('contractId') || {value:''}).value;
-  var custName = (document.getElementById('custName') || {value:''}).value;
-  doc.setFontSize(10);
-  doc.text('Contract ID: ' + contractId, 14, y); y += 6;
-  doc.text('Customer: ' + custName, 14, y); y += 8;
-  var list = buildSelectedList();
-  doc.text('Items:', 14, y); y += 6;
-  list.forEach(function(it){
-    var line = it.code + ' - ' + it.desc +
-      ' R' + it.price.toFixed(2) + ' x ' + it.qty +
-      ' = R' + it.line.toFixed(2);
-    var split = doc.splitTextToSize(line, 180);
-    doc.text(split, 14, y);
-    y += split.length * 6;
-    if(y > 270){
-      doc.addPage(); y = 12;
-    }
-  });
-  y += 6;
-  var total = (document.getElementById('total') || {innerText:'0.00'}).innerText;
-  doc.setFontSize(12);
-  doc.text('Total: R' + total, 14, y);
-  doc.save('ContractedQuote.pdf');
-}
-
-function clearAll(){
-  try{ document.getElementById('customerForm').reset(); }catch(e){}
-  var rows = document.querySelectorAll('#itemsTable tbody tr');
-  rows.forEach(function(r){
-    try{
-      r.querySelector('.qty').value = 0;
-      r.querySelector('.linetotal').innerText = '0.00';
-    }catch(e){}
-  });
-  try{ document.getElementById('total').innerText = '0.00'; }catch(e){}
+function calc(){
+    let total=0;
+    document.querySelectorAll("tbody tr").forEach(r=>{
+        let price=parseFloat(r.children[2].innerText);
+        let qty=parseFloat(r.querySelector("input").value)||0;
+        let line=price*qty;
+        r.querySelector(".line").innerText=line.toFixed(2);
+        total+=line;
+    });
+    document.getElementById("grandTotal").innerText=total.toFixed(2);
 }
 </script>
+
 </body>
 </html>
